@@ -1,0 +1,1 @@
+java -jar iShield-Test-Runner.jar

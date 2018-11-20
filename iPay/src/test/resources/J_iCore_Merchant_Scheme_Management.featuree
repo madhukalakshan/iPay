@@ -1,0 +1,339 @@
+###############################################################################################################################################
+# Merchant scheme with name 31SCHEME will be created.
+# Merchant scheme with name 31SCHEMEDEL is created for deletion.
+###############################################################################################################################################
+Feature: iCore Merchant Scheme Management
+
+  @MerSch
+  Scenario: Goto Merchant Scheme in iCore module
+    Given I Click the "Merchant Management" icon to Merchant Scheme Management
+    Then I should see the "Merchant Management" page to Merchant Scheme Management
+    And I Click the "Merchant Scheme Management" icon
+    Then I should see the "Merchant Scheme Management" page
+
+  Scenario: Add Merchant Scheme in iCore module
+    Given I Click the "Add Merchant Scheme" icon
+    Then I should see the "Add Merchant Scheme" page
+    And I should fill Scheme Details
+      | field           | value   |
+      | Description     | 31SCHEME |
+      | FromDate        |      25 |
+      | FromMon         |       7 |
+      | FromYear        |    2017 |
+      | ToDate          |      31 |
+      | ToMon           |       7 |
+      | ToYear          |    2018 |
+      | CmsnFee         | CMSN    |
+      | CmsnFeeNtwkTyp  |       0 |
+      | CmsnFeeTrxnTyp  |     100 |
+      #| CmsnFeeCurrency |    524  |
+      #| MinTranAmount   |      20 |
+      | CmsnFeeCalcType | F       |
+      | CmsnFeeFee      |       5 |
+    And I Click on "Add" Button in Merchant Scheme
+    And I should enter merchant "charge" Details
+      | field           | value |
+      | CmsnFee         | CHG   |
+      | CmsnFeeNtwkTyp  |     0 |
+      | CmsnFeeTrxnTyp  |   108 |
+      #| MinTranAmount   |    20 |
+      | CmsnFeeCalcType | F     |
+      | CmsnFeeFee      |     5 |
+    And I Click on "Add" Button in Merchant Scheme
+    And I Click on Button "Submit"
+    Then I Check for Error "Cannot be Blank"
+    Then I Check for Error "Please enter any one of the fees"
+    Then I Check for Success Message "Merchant Scheme Added successfully" in "Add Merchant Scheme"
+    Then I call verify method
+      | Alias | SQL                                                                                                                                                                                                                                                                      | Expected Row Count |
+      | ICORE | SELECT COUNT(*) FROM BKN_DR_MERC_SCMA WHERE DESCRIPTION='31SCHEME' AND ADDED_BY='MADHUKA' AND BANK_CODE='0001'  AND STATUS_CODE=5                                                                                                                                         |                  1 |
+      | ICORE | SELECT COUNT(*) FROM BKN_DS_FEE_PARM WHERE ATTR IN  (SELECT SCHEME_ID FROM BKN_DR_MERC_SCMA WHERE DESCRIPTION='31SCHEME' AND ADDED_BY='MADHUKA' AND BANK_CODE='0001' AND STATUS_CODE=5) AND ATTR_TYP='SCMA' AND ADDED_BY='MADHUKA' AND BANK_CODE='0001' AND STATUS_CODE=1 |                  2 |
+
+  Scenario: Back to Merchant Scheme Management
+    And I click on "Merchant Scheme Management" icon to back
+    Then I should see the "Merchant Scheme Management" page
+
+  Scenario: Reject Merchant Scheme
+    Given I Click the "Approve Merchant Scheme" icon
+    Then I should see the "Approve Merchant Scheme" page
+    And I fill "Merchant Scheme Details"
+      | field       | value   |
+      | Description | 31SCHEME |
+    And I Click on Button "Submit"
+    Then I check whether No Records Found
+    And I click the link "Details"
+    And I Enter the Comment "Reject Merchant Scheme" in "Approve Merchant Scheme"
+      | Element | Option |
+      | Comment | id     |
+    And I Click on Button "Submit2"
+    Then I Check for Success Message "Merchant Scheme Rejected successfully" in "Approve Merchant Scheme"
+    Then I call verify method
+      | Alias | SQL                                                                                                                                                                                                                                                                      | Expected Row Count |
+      | ICORE | SELECT COUNT(*) FROM BKN_DR_MERC_SCMA WHERE DESCRIPTION='31SCHEME' AND ADDED_BY='MADHUKA' AND BANK_CODE='0001'  AND STATUS_CODE=4                                                                                                                                         |                  1 |
+      | ICORE | SELECT COUNT(*) FROM BKN_DS_FEE_PARM WHERE ATTR IN  (SELECT SCHEME_ID FROM BKN_DR_MERC_SCMA WHERE DESCRIPTION='31SCHEME' AND ADDED_BY='MADHUKA' AND BANK_CODE='0001' AND STATUS_CODE=4) AND ATTR_TYP='SCMA' AND ADDED_BY='MADHUKA' AND BANK_CODE='0001' AND STATUS_CODE=1 |                  2 |
+
+  Scenario: Back to Merchant Scheme Management
+    And I click on "Merchant Scheme Management" icon to back
+    Then I should see the "Merchant Scheme Management" page
+
+  Scenario: Reapply Merchant Scheme
+    Given I Click the "Reapply Merchant Scheme" icon
+    Then I should see the "Reapply Merchant Scheme" page
+    And I fill "Merchant Scheme Details"
+      | field       | value   |
+      | Description | 31SCHEME |
+    And I Click on Button "Submit"
+    Then I check whether No Records Found
+    And I click the link "Details"
+    And I Enter the Comment "Reapply Merchant Scheme" in "Reapply Merchant Scheme"
+      | Element | Option |
+      | Comment | id     |
+    And I Click on Button "Submit"
+    Then I Check for Success Message "Merchant Scheme Reapplied successfully" in "Reapply Merchant Scheme"
+    Then I call verify method
+      | Alias | SQL                                                                                                                                                                                                                                                                      | Expected Row Count |
+      | ICORE | SELECT COUNT(*) FROM BKN_DR_MERC_SCMA WHERE DESCRIPTION='31SCHEME' AND ADDED_BY='MADHUKA' AND BANK_CODE='0001'  AND STATUS_CODE=2                                                                                                                                         |                  1 |
+      | ICORE | SELECT COUNT(*) FROM BKN_DS_FEE_PARM WHERE ATTR IN  (SELECT SCHEME_ID FROM BKN_DR_MERC_SCMA WHERE DESCRIPTION='31SCHEME' AND ADDED_BY='MADHUKA' AND BANK_CODE='0001' AND STATUS_CODE=2) AND ATTR_TYP='SCMA' AND ADDED_BY='MADHUKA' AND BANK_CODE='0001' AND STATUS_CODE=1 |                  2 |
+
+  Scenario: Back to Merchant Scheme Management
+    And I click on "Merchant Scheme Management" icon to back
+    Then I should see the "Merchant Scheme Management" page
+
+  Scenario: Approve Reapplied Merchant Scheme
+    Given I Click the "Approve Merchant Scheme" icon
+    Then I should see the "Approve Merchant Scheme" page
+    And I fill "Merchant Scheme Details"
+      | field       | value   |
+      | Description | 31SCHEME |
+    And I Click on Button "Submit"
+    Then I check whether No Records Found
+    And I click the link "Details"
+    And I Enter the Comment "Approve reapplied Merchant Scheme" in "Approve Merchant Scheme"
+      | Element | Option |
+      | Comment | id     |
+    And I Click on Button "Submit1"
+    Then I Check for Success Message "Merchant Scheme Approved successfully" in "Approve Merchant Scheme"
+    Then I call verify method
+      | Alias | SQL                                                                                                                                                                                                                                                                      | Expected Row Count |
+      | ICORE | SELECT COUNT(*) FROM BKN_DR_MERC_SCMA WHERE DESCRIPTION='31SCHEME' AND ADDED_BY='MADHUKA' AND BANK_CODE='0001'  AND STATUS_CODE=1                                                                                                                                         |                  1 |
+      | ICORE | SELECT COUNT(*) FROM BKN_DS_FEE_PARM WHERE ATTR IN  (SELECT SCHEME_ID FROM BKN_DR_MERC_SCMA WHERE DESCRIPTION='31SCHEME' AND ADDED_BY='MADHUKA' AND BANK_CODE='0001' AND STATUS_CODE=1) AND ATTR_TYP='SCMA' AND ADDED_BY='MADHUKA' AND BANK_CODE='0001' AND STATUS_CODE=1 |                  2 |
+
+  Scenario: Back to Merchant Scheme Management
+    And I click on "Merchant Scheme Management" icon to back
+    Then I should see the "Merchant Scheme Management" page
+
+  Scenario: Edit Merchant scheme
+    Given I Click the "Edit Merchant Scheme" icon
+    Then I should see the "Edit Merchant Scheme" page
+    And I fill "Merchant Scheme Details"
+      | field       | value   |
+      | Description | 31SCHEME |
+    And I Click on Button "Submit"
+    Then I check whether No Records Found
+    And I click the link "Details"
+    And I Click on all links with "Remove"
+    And I should enter merchant "charge" Details
+      | field           | value |
+      | CmsnFee         | CMSN  |
+      | CmsnFeeNtwkTyp  |     0 |
+      | CmsnFeeTrxnTyp  |   100 |
+      #| CmsnFeeCurrency |   524 |
+      #| MinTranAmount   |    20 |
+      | CmsnFeeCalcType | F     |
+      | CmsnFeeFee      |     5 |
+    And I Click on "Add" Button in Edit Merchant Scheme
+    And I should enter merchant "commission" Details
+      | field           | value |
+      | CmsnFee         | CHG   |
+      | CmsnFeeNtwkTyp  |     0 |
+      | CmsnFeeTrxnTyp  |   110 |
+      #| MinTranAmount   |    20 |
+      | CmsnFeeCalcType | F     |
+      | CmsnFeeFee      |     5 |
+    And I Click on "Add" Button in Edit Merchant Scheme
+    And I Enter the Comment "Edit Merchant Scheme" in "Edit Merchant Scheme"
+      | Element | Option |
+      | Comment | id     |
+    And I Click on Button "Submit"
+    Then I Check for Success Message "Merchant Scheme edited successfully" in "Edit Merchant Scheme"
+    Then I call verify method
+      | Alias | SQL                                                                                                                                                                                                                                                                      | Expected Row Count |
+      | ICORE | SELECT COUNT(*) FROM BKN_DR_MERC_SCMA WHERE DESCRIPTION='31SCHEME' AND ADDED_BY='MADHUKA' AND BANK_CODE='0001'  AND STATUS_CODE=3                                                                                                                                         |                  1 |
+      | ICORE | SELECT COUNT(*) FROM BKN_DS_FEE_PARM WHERE ATTR IN  (SELECT SCHEME_ID FROM BKN_DR_MERC_SCMA WHERE DESCRIPTION='31SCHEME' AND ADDED_BY='MADHUKA' AND BANK_CODE='0001' AND STATUS_CODE=3) AND ATTR_TYP='SCMA' AND ADDED_BY='MADHUKA' AND BANK_CODE='0001' AND STATUS_CODE=1 |                  2 |
+
+  Scenario: Back to Merchant Scheme Management
+    And I click on "Merchant Scheme Management" icon to back
+    Then I should see the "Merchant Scheme Management" page
+
+  Scenario: Approve Edited Merchant Scheme
+    Given I Click the "Approve Merchant Scheme" icon
+    Then I should see the "Approve Merchant Scheme" page
+    And I fill "Merchant Scheme Details"
+      | field       | value   |
+      | Description | 31SCHEME |
+    And I Click on Button "Submit"
+    Then I check whether No Records Found
+    Then I click the link "Details"
+    And I Enter the Comment "Approve edited Merchant Scheme" in "Approve Merchant Scheme"
+      | Element | Option |
+      | Comment | id     |
+    And I Click on Button "Submit1"
+    Then I Check for Success Message "Merchant Scheme Approved successfully" in "Approve Merchant Scheme"
+    Then I call verify method
+      | Alias | SQL                                                                                                                                                                                                                                                                      | Expected Row Count |
+      | ICORE | SELECT COUNT(*) FROM BKN_DR_MERC_SCMA WHERE DESCRIPTION='31SCHEME' AND ADDED_BY='MADHUKA' AND BANK_CODE='0001'  AND STATUS_CODE=1                                                                                                                                         |                  1 |
+      | ICORE | SELECT COUNT(*) FROM BKN_DS_FEE_PARM WHERE ATTR IN  (SELECT SCHEME_ID FROM BKN_DR_MERC_SCMA WHERE DESCRIPTION='31SCHEME' AND ADDED_BY='MADHUKA' AND BANK_CODE='0001' AND STATUS_CODE=1) AND ATTR_TYP='SCMA' AND ADDED_BY='MADHUKA' AND BANK_CODE='0001' AND STATUS_CODE=1 |                  2 |
+
+  Scenario: Back to Merchant Scheme Management
+    And I click on "Merchant Scheme Management" icon to back
+    Then I should see the "Merchant Scheme Management" page
+
+  Scenario: Suspend Merchant scheme
+    Given page down
+    And I Click the "Suspend Merchant Scheme" icon
+    Then I should see the "Suspend Merchant Scheme" page
+    And I fill "Merchant Scheme Details"
+      | field       | value   |
+      | Description | 31SCHEME |
+    And I Click on Button "Submit"
+    Then I check whether No Records Found
+    Then I click the link "Details"
+    And I Enter the Comment "Suspend Merchant Scheme" in "Suspend Merchant Scheme"
+      | Element | Option |
+      | Comment | id     |
+    And I Click on Button "Submit"
+    Then I Check for Success Message "Merchant Scheme Suspended successfully" in "Suspend Merchant Scheme"
+    Then I call verify method
+      | Alias | SQL                                                                                                                                                                                                                                                                      | Expected Row Count |
+      | ICORE | SELECT COUNT(*) FROM BKN_DR_MERC_SCMA WHERE DESCRIPTION='31SCHEME' AND ADDED_BY='MADHUKA' AND BANK_CODE='0001'  AND STATUS_CODE=6                                                                                                                                         |                  1 |
+      | ICORE | SELECT COUNT(*) FROM BKN_DS_FEE_PARM WHERE ATTR IN  (SELECT SCHEME_ID FROM BKN_DR_MERC_SCMA WHERE DESCRIPTION='31SCHEME' AND ADDED_BY='MADHUKA' AND BANK_CODE='0001' AND STATUS_CODE=6) AND ATTR_TYP='SCMA' AND ADDED_BY='MADHUKA' AND BANK_CODE='0001' AND STATUS_CODE=1 |                  2 |
+
+  Scenario: Back to Merchant Scheme Management
+    And I click on "Merchant Scheme Management" icon to back
+    Then I should see the "Merchant Scheme Management" page
+
+  Scenario: Revoke Merchant scheme
+    Given page down
+    And I Click the "Revoke Merchant Scheme" icon
+    Then I should see the "Revoke Merchant Scheme" page
+    And I fill "Merchant Scheme Details"
+      | field       | value   |
+      | Description | 31SCHEME |
+    And I Click on Button "Submit"
+    Then I check whether No Records Found
+    And I click the link "Details"
+    And I Enter the Comment "Revoke Merchant Scheme" in "Revoke Merchant Scheme"
+      | Element | Option |
+      | Comment | id     |
+    And I Click on Button "Submit"
+    Then I Check for Success Message "Merchant Scheme Revoked successfully" in "Revoke Merchant Scheme"
+    Then I call verify method
+      | Alias | SQL                                                                                                                                                                                                                                                                      | Expected Row Count |
+      | ICORE | SELECT COUNT(*) FROM BKN_DR_MERC_SCMA WHERE DESCRIPTION='31SCHEME' AND ADDED_BY='MADHUKA' AND BANK_CODE='0001'  AND STATUS_CODE=7                                                                                                                                         |                  1 |
+      | ICORE | SELECT COUNT(*) FROM BKN_DS_FEE_PARM WHERE ATTR IN  (SELECT SCHEME_ID FROM BKN_DR_MERC_SCMA WHERE DESCRIPTION='31SCHEME' AND ADDED_BY='MADHUKA' AND BANK_CODE='0001' AND STATUS_CODE=7) AND ATTR_TYP='SCMA' AND ADDED_BY='MADHUKA' AND BANK_CODE='0001' AND STATUS_CODE=1 |                  2 |
+
+  Scenario: Back to Merchant Scheme Management
+    And I click on "Merchant Scheme Management" icon to back
+    Then I should see the "Merchant Scheme Management" page
+
+  Scenario: Approve revoked Merchant Scheme
+    Given I Click the "Approve Merchant Scheme" icon
+    Then I should see the "Approve Merchant Scheme" page
+    And I fill "Merchant Scheme Details"
+      | field       | value   |
+      | Description | 31SCHEME |
+    And I Click on Button "Submit"
+    Then I check whether No Records Found
+    And I click the link "Details"
+    And I Enter the Comment "Approve revoked Merchant Scheme" in "Approve Merchant Scheme"
+      | Element | Option |
+      | Comment | id     |
+    And I Click on Button "Submit1"
+    Then I Check for Success Message "Merchant Scheme Approved successfully" in "Approve Merchant Scheme"
+    Then I call verify method
+      | Alias | SQL                                                                                                                                                                                                                                                                      | Expected Row Count |
+      | ICORE | SELECT COUNT(*) FROM BKN_DR_MERC_SCMA WHERE DESCRIPTION='31SCHEME' AND ADDED_BY='MADHUKA' AND BANK_CODE='0001'  AND STATUS_CODE=1                                                                                                                                         |                  1 |
+      | ICORE | SELECT COUNT(*) FROM BKN_DS_FEE_PARM WHERE ATTR IN  (SELECT SCHEME_ID FROM BKN_DR_MERC_SCMA WHERE DESCRIPTION='31SCHEME' AND ADDED_BY='MADHUKA' AND BANK_CODE='0001' AND STATUS_CODE=1) AND ATTR_TYP='SCMA' AND ADDED_BY='MADHUKA' AND BANK_CODE='0001' AND STATUS_CODE=1 |                  2 |
+
+  Scenario: Back to Merchant Scheme Management
+    And I click on "Merchant Scheme Management" icon to back
+    Then I should see the "Merchant Scheme Management" page
+
+  Scenario: View Merchant scheme
+    Given page down
+    And I Click the "View Merchant Scheme" icon
+    Then I should see the "View Merchant Scheme" page
+    And I fill "Merchant Scheme Details"
+      | field       | value   |
+      | Description | 31SCHEME |
+    And I Click on Button "Submit"
+    And I click the link "Details"
+
+  Scenario: Back to Merchant Scheme Management
+    And I click on "Merchant Scheme Management" icon to back
+    Then I should see the "Merchant Scheme Management" page
+
+  Scenario: Add Merchant Scheme for deletion in iCore module
+    Given I Click the "Add Merchant Scheme" icon
+    Then I should see the "Add Merchant Scheme" page
+    And I should fill Scheme Details
+      | field           | value      |
+      | Description     | 31SCHEMEDEL |
+      | FromDate        |         25 |
+      | FromMon         |          7 |
+      | FromYear        |       2017 |
+      | ToDate          |         31 |
+      | ToMon           |          7 |
+      | ToYear          |       2018 |
+      | CmsnFee         | CMSN       |
+      | CmsnFeeNtwkTyp  |          0 |
+      | CmsnFeeTrxnTyp  |        100 |
+      #| CmsnFeeCurrency |    524  |
+      #| MinTranAmount   |      20 |
+      | CmsnFeeCalcType | F          |
+      | CmsnFeeFee      |          5 |
+    And I Click on "Add" Button in Merchant Scheme
+    And I should enter merchant "charge" Details
+      | field           | value |
+      | CmsnFee         | CHG   |
+      | CmsnFeeNtwkTyp  |     0 |
+      | CmsnFeeTrxnTyp  |   108 |
+      #| MinTranAmount   |    20 |
+      | CmsnFeeCalcType | F     |
+      | CmsnFeeFee      |     5 |
+    And I Click on "Add" Button in Merchant Scheme
+    And I Click on Button "Submit"
+    Then I Check for Error "Cannot be Blank"
+    Then I Check for Error "Please enter any one of the fees"
+    Then I Check for Success Message "Merchant Scheme Added successfully" in "Add Merchant Scheme"
+    Then I call verify method
+      | Alias | SQL                                                                                                                                                                                                                                                                         | Expected Row Count |
+      | ICORE | SELECT COUNT(*) FROM BKN_DR_MERC_SCMA WHERE DESCRIPTION='31SCHEMEDEL' AND ADDED_BY='MADHUKA' AND BANK_CODE='0001'  AND STATUS_CODE=5                                                                                                                                         |                  1 |
+      | ICORE | SELECT COUNT(*) FROM BKN_DS_FEE_PARM WHERE ATTR IN  (SELECT SCHEME_ID FROM BKN_DR_MERC_SCMA WHERE DESCRIPTION='31SCHEMEDEL' AND ADDED_BY='MADHUKA' AND BANK_CODE='0001' AND STATUS_CODE=5) AND ATTR_TYP='SCMA' AND ADDED_BY='MADHUKA' AND BANK_CODE='0001' AND STATUS_CODE=1 |                  2 |
+
+  Scenario: Back to Merchant Scheme Management
+    And I click on "Merchant Scheme Management" icon to back
+    Then I should see the "Merchant Scheme Management" page
+
+  Scenario: Delete the Merchant scheme
+    Given I Click the "Delete Merchant Scheme" icon
+    Then I should see the "Delete Merchant Scheme" page
+    And I fill "Merchant Scheme Details"
+      | field       | value      |
+      | Description | 31SCHEMEDEL |
+    And I Click on Button "Submit"
+    Then I check whether No Records Found
+    And I click the link "Details"
+    And I Click on Button "Submit"
+    Then I Check for Success Message "Merchant Scheme Deleted successfully" in "Delete Merchant Scheme"
+    Then I call verify method
+      | Alias | SQL                                                                                                                                 | Expected Row Count |
+      | ICORE | SELECT COUNT(*) FROM BKN_DR_MERC_SCMA WHERE DESCRIPTION='31SCHEMEDEL' AND ADDED_BY='MADHUKA' AND BANK_CODE='0001' and STATUS_CODE=90 |                  1 |
+
+  Scenario: Back to Merchant Scheme Management
+    And I click on "Merchant Scheme Management" icon to back
+    Then I should see the "Merchant Scheme Management" page
+
+  Scenario: Moving to iCore Home Menu
+    Given I click on Home Page
+    Then I should see "iCore" Home Page

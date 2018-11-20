@@ -1,0 +1,223 @@
+Feature: Feature File for verify Merchant Commission and Charge
+
+  @verMercCommAndChar
+  Scenario: Modify Merchant Commission
+    Given I am at "iCore" Home Page
+    Then I should see "iCore" Home Page
+    And I Click the "Merchant Management" icon to "Merchant Commission"
+    Then I should see the "Merchant Management" page to "Merchant Commission"
+    And I Click the "Merchant Management" icon to "Merchant Commission"
+    Then I should see the "Merchant Management" page to "Merchant Commission"
+    And I Click the "Edit Merchant" icon to "Merchant Commission"
+    Then I should see the "Edit Merchant" page to "Merchant Commission"
+    And I fill data criteria of "Merchant Commission"
+      | Element  | value                       | option | ElementType |
+      | MercDesc | Nugegoda Cargills Food City | Name   | Textbox     |
+    And I click on "Submit" button in "Merchant Commission"
+      | Element | option |
+      | Submit  | name   |
+    And I click the link "Details"
+    And I click the link "Remove"
+    And I fill data criteria of "Merchant Commission"
+      | Element         | value | option   | ElementType |
+      | CmsnFee         | CMSN  | Id,value | DropDown    |
+      | CmsnFeeNtwkTyp  |     0 | Id,value | DropDown    |
+      | CmsnFeeTrxnTyp  |   100 | Id,value | DropDown    |
+      | MinTranAmount   |    20 | Id       | Textbox     |
+      | CmsnFeeCalcType | F     | Id,value | DropDown    |
+      | CmsnFeeFee      |    10 | Id       | Textbox     |
+    And I click on "Add" button in "Merchant Commission"
+      | Element                                              | option |
+      | //body/div[2]/div[3]/form/fieldset[6]/ol/li[8]/input | xpath  |
+    And I Enter the Comment "Modify Merchant Commission" in "Merchant Commission"
+      | Element | Option |
+      | Comment | id     |
+    And I click on "Submit" button in "Merchant Commission"
+      | Element | Option |
+      | Submit1 | Name   |
+    Then I Check for Success Message "Merchant edited successfully" in "Merchant Commission"
+    Then I call verify method
+      | Alias | SQL                                                                                                                    | Expected Row Count |
+      | ICORE | SELECT COUNT(*) FROM BKN_DM_MERC WHERE MERC_DES='Nugegoda Cargills Food City' AND ADDED_BY='MADHUKA' AND STATUS_CODE=3 |                  1 |
+
+  Scenario: Approve Merchant Commission
+    Given I Click the "Approve Merchant" icon in "Merchant Commission"
+    Then I should see the "Approve Merchant" page to "Merchant Commission"
+    And I fill data criteria of "Merchant Commission"
+      | Element  | value                       | option | ElementType |
+      | MercDesc | Nugegoda Cargills Food City | Name   | Textbox     |
+    And I click on "Submit" button in "Merchant Commission"
+      | Element | option |
+      | Submit  | name   |
+    And I click the link "Details"
+    And I Enter the Comment "Modify Merchant Commission" in "Merchant Commission"
+      | Element | Option |
+      | Comment | id     |
+    And I click on "Submit" button in "Merchant Commission"
+      | Element | Option |
+      | Submit1 | Name   |
+    Then I Check for Success Message "Merchant Approved successfully" in "Merchant Commission"
+    Then I call verify method
+      | Alias | SQL                                                                                                                    | Expected Row Count |
+      | ICORE | SELECT COUNT(*) FROM BKN_DM_MERC WHERE MERC_DES='Nugegoda Cargills Food City' AND ADDED_BY='MADHUKA' AND STATUS_CODE=1 |                  1 |
+
+  Scenario: Logout from merchant application
+    And I click on "Log Out" button in "Merchant Commission"
+      | Element                          | option |
+      | //div[contains(text(),'Logout')] | xpath  |
+    And I close the appication console
+
+  Scenario: Perform iPay Sale Transaction to Merchant Commissions
+    Given I am at Shopping Cart page to "Merchant Commission"
+    Then I should see the "Products" page to "Merchant Commission"
+    And I click on "Add To Cart" button in "Merchant Commission"
+      | Element                                   | option |
+      | //button[contains(text(), 'Add To Cart')] | xpath  |
+    And I Click on "Check-out!" link in Shopping Cart to "Merchant Commission"
+    Then I should see the "View Cart" page to "Merchant Commission"
+    And I click on "Pay Now" button in "Merchant Commission"
+      | Element                   | option |
+      | //input[@value='Pay Now'] | xpath  |
+    And I Select the "MASTER" Payment Type to "Merchant Commission"
+    And I click on "Pay Now" button in "Merchant Commission"
+      | Element                   | option |
+      | //input[@value='Pay Now'] | xpath  |
+    And I fill data criteria of "Merchant Commission"
+      | Element        | value            | option     | ElementType |
+      | cardNumber     | 5362050100072357 | Name       | Textbox     |
+      | cvcNumber      |              530 | Name       | Textbox     |
+      | expMonth       |               06 | Name,Value | Dropdown    |
+      | expYear        |             2020 | Name,Value | Dropdown    |
+      | cardHolderName | test             | Name       | Textbox     |
+    And I click on "Pay Now" button in "Merchant Commission"
+      | Element                   | option |
+      | //input[@value='Pay Now'] | xpath  |
+    And I click on "Confirm Payment" button in "Merchant Commission"
+      | Element                           | option |
+      | //input[@value='Confirm Payment'] | xpath  |
+    And I should see "ACCEPTED" transaction status to "Merchant Commission"
+    Then I veify DB values for Transaction to "Merchant Commission"
+    Then I verify "commission" record
+
+  Scenario: Close the Shopping Cart page
+    And I close the Shopping Cart page
+
+  Scenario: Login to Application
+    Given I am at "IAdmin" Login page to "Merchant Charge"
+    And I fill data criteria of "Merchant Charge"
+      | Element     | value   | option | ElementType |
+      | user_id     | madhuka | Name   | Textbox     |
+      | user_suffix |     000 | Name   | Textbox     |
+      | user_bank   |    0001 | Name   | Textbox     |
+    And I click on "Login" button in "Merchant Charge"
+      | Element                 | option |
+      | //input[@value='Login'] | xpath  |
+    And I fill data criteria of "Merchant Charge"
+      | Element  | value      | option | ElementType |
+      | password | PassworD2. | Name   | Textbox     |
+    And I click on "Login" button in "Merchant Charge"
+      | Element                 | option |
+      | //input[@value='Login'] | xpath  |
+    And Select the top frame in Application page
+    Then I should see the "Application Menu" Application Page
+
+  Scenario: Modify Merchant Charge
+    Given I am at "iCore" Home Page
+    Then I should see "iCore" Home Page
+    And I Click the "Merchant Management" icon to "Merchant Charge"
+    Then I should see the "Merchant Management" page to "Merchant Charge"
+    And I Click the "Merchant Management" icon to "Merchant Charge"
+    Then I should see the "Merchant Management" page to "Merchant Charge"
+    And I Click the "Edit Merchant" icon to "Merchant Charge"
+    Then I should see the "Edit Merchant" page to "Merchant Charge"
+    And I fill data criteria of "Merchant Charge"
+      | Element  | value                       | option | ElementType |
+      | MercDesc | Nugegoda Cargills Food City | Name   | Textbox     |
+    And I click on "Submit" button in "Merchant Charge"
+      | Element | option |
+      | Submit  | name   |
+    And I click the link "Details"
+    And I click the link "Remove"
+    And I fill data criteria of "Merchant Charge"
+      | Element         | value | option   | ElementType |
+      | CmsnFee         | CHG   | Id,value | DropDown    |
+      | CmsnFeeNtwkTyp  |     0 | Id,value | DropDown    |
+      | CmsnFeeTrxnTyp  |   100 | Id,value | DropDown    |
+      | MinTranAmount   |    20 | Id       | Textbox     |
+      | CmsnFeeCalcType | F     | Id,value | DropDown    |
+      | CmsnFeeFee      |    10 | Id       | Textbox     |
+    And I click on "Add" button in "Merchant Charge"
+      | Element                                              | option |
+      | //body/div[2]/div[3]/form/fieldset[6]/ol/li[8]/input | xpath  |
+    And I Enter the Comment "Modify Merchant Commission" in "Merchant Charge"
+      | Element | Option |
+      | Comment | id     |
+    And I click on "Submit" button in "Merchant Charge"
+      | Element | Option |
+      | Submit1 | Name   |
+    Then I Check for Success Message "Merchant edited successfully" in "Merchant Charge"
+    Then I call verify method
+      | Alias | SQL                                                                                                                    | Expected Row Count |
+      | ICORE | SELECT COUNT(*) FROM BKN_DM_MERC WHERE MERC_DES='Nugegoda Cargills Food City' AND ADDED_BY='MADHUKA' AND STATUS_CODE=3 |                  1 |
+
+  Scenario: Approve Merchant Commission
+    Given I Click the "Approve Merchant" icon in "Merchant Charge"
+    Then I should see the "Approve Merchant" page to "Merchant Charge"
+    And I fill data criteria of "Merchant Charge"
+      | Element  | value                       | option | ElementType |
+      | MercDesc | Nugegoda Cargills Food City | Name   | Textbox     |
+    And I click on "Submit" button in "Merchant Charge"
+      | Element | option |
+      | Submit  | name   |
+    And I click the link "Details"
+    And I Enter the Comment "Modify Merchant Commission" in "Merchant Charge"
+      | Element | Option |
+      | Comment | id     |
+    And I click on "Submit" button in "Merchant Charge"
+      | Element | Option |
+      | Submit1 | Name   |
+    Then I Check for Success Message "Merchant Approved successfully" in "Merchant Charge"
+    Then I call verify method
+      | Alias | SQL                                                                                                                    | Expected Row Count |
+      | ICORE | SELECT COUNT(*) FROM BKN_DM_MERC WHERE MERC_DES='Nugegoda Cargills Food City' AND ADDED_BY='MADHUKA' AND STATUS_CODE=1 |                  1 |
+
+  Scenario: Logout from merchant application
+    And I click on "Log Out" button in "Add Merchant API Details"
+      | Element                          | option |
+      | //div[contains(text(),'Logout')] | xpath  |
+    And I close the appication console
+
+  Scenario: Perform iPay Sale Transaction to Merchant Commissions
+    Given I am at Shopping Cart page to "Merchant Charge"
+    Then I should see the "Products" page to "Merchant Charge"
+    And I click on "Add To Cart" button in "Merchant Charge"
+      | Element                                   | option |
+      | //button[contains(text(), 'Add To Cart')] | xpath  |
+    And I Click on "Check-out!" link in Shopping Cart to "Merchant Charge"
+    Then I should see the "View Cart" page to "Merchant Charge"
+    And I click on "Pay Now" button in "Merchant Charge"
+      | Element                   | option |
+      | //input[@value='Pay Now'] | xpath  |
+    And I Select the "MASTER" Payment Type to "Merchant Charge"
+    And I click on "Pay Now" button in "Merchant Charge"
+      | Element                   | option |
+      | //input[@value='Pay Now'] | xpath  |
+    And I fill data criteria of "Merchant Charge"
+      | Element        | value            | option     | ElementType |
+      | cardNumber     | 5362050100072357 | Name       | Textbox     |
+      | cvcNumber      |              530 | Name       | Textbox     |
+      | expMonth       |               06 | Name,Value | Dropdown    |
+      | expYear        |             2020 | Name,Value | Dropdown    |
+      | cardHolderName | test             | Name       | Textbox     |
+    And I click on "Pay Now" button in "Merchant Charge"
+      | Element                   | option |
+      | //input[@value='Pay Now'] | xpath  |
+    And I click on "Confirm Payment" button in "Merchant Charge"
+      | Element                           | option |
+      | //input[@value='Confirm Payment'] | xpath  |
+    And I should see "ACCEPTED" transaction status to "Merchant Charge"
+    Then I veify DB values for Transaction to "Merchant Charge"
+    Then I verify "charge" record
+
+  Scenario: Close the Shopping Cart page
+    And I close the Shopping Cart page
